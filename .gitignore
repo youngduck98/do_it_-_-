@@ -1,0 +1,8 @@
+*.sln
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+*.vcxproj
+*.filters
+*.user

@@ -6,3 +6,15 @@
 *.vcxproj
 *.filters
 *.user
+Project1/.vs/Project1/v17/.suo
+Project1/.vs/Project1/v17/ipch/AutoPCH/1d607df8ddd8c7c/DO_WHILE.ipch
+Project1/.vs/Project1/v17/ipch/AutoPCH/8e9d09d6b49d495b/31P_Q8.ipch
+*.ipch
+*.tlog
+*.obj
+*.recipe
+*.ilk
+*.log
+*.idb
+*.pdb
+*.exe

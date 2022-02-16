@@ -27,10 +27,18 @@ bool cmpr_d(int* a, int* b) {
 }
 
 void bubble_sort(int *a, int m, int n, bool (*fp)(int*, int*)) {
+	int k = 0;
 	for (int i = m-1; i >= n+1; --i) {
 		if (fp(a+i-1,a+i)) {
+			printf("swap %d %d\n", *(a + i - 1), *(a + i));
 			swap((a + i), (a + i - 1));
 		}
+		else {
+			k++;
+		}
+	}
+	if (k == m-n-1) {
+		return;
 	}
 	if (n < m) {
 		bubble_sort(a, m, n + 1, fp);
@@ -40,7 +48,7 @@ void bubble_sort(int *a, int m, int n, bool (*fp)(int*, int*)) {
 int main() {
 	int a[10] = { 10,8,9,7,6,5,4,3,2,1 };
 	bool (*fp);
-	fp = cmpr_u;
+	fp = cmpr_d;
 	bubble_sort(a, 10, 0, fp);
 	for (int i = 0; i < 10; i++) {
 		printf("%d ", a[i]);

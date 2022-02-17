@@ -15,9 +15,7 @@ void move_ary(int* a, int m, int n, int k) {
 		printf("false\n");
 		return;
 	}
-	print_ary(a, 10);
 	int b = *(a + n);
-	printf("%d %d\n", b, n);
 	for (int i = n; i > k; i--) {
 		*(a + i) = *(a + i - 1);
 	}
@@ -25,7 +23,7 @@ void move_ary(int* a, int m, int n, int k) {
 }
 
 bool cmp_u(int* a, int* b) {
-	if (*a > *b) {
+	if (*a >= *b) {
 		return true;
 	}
 	else {
@@ -43,6 +41,27 @@ bool print_process(int a, int b) {
 			printf("%2c", ' ');
 	}
 	printf("\n");
+}
+
+int binary_search(int* a, int m, int n, int c1, int c2, bool(*fp)(void*, void*)) {
+	if (c1 >= c2) {
+		if (fp(a + c2, a + n) || *(a + c2) == *(a + n)) {
+			return c2;
+		}
+		else {
+			return c2 + 1;
+		}
+	}
+
+	if (*(a + (c1 + c2) / 2) == *(a + n)) {
+		return (c1 + c2) / 2;
+	}
+	else if (fp(a + (c1 + c2) / 2, a + n)) {
+		return binary_search(a, m, n, c1, (c1 + c2) / 2 - 1, fp);
+	}
+	else {
+		return binary_search(a, m, n, (c1 + c2) / 2 + 1, c2, fp);
+	}
 }
 
 void binary_sort(int* a, int m, int n, int c1, int c2, bool (*fp)(void*, void*)) {
@@ -85,20 +104,25 @@ void insert_sort(int* a, int m, int n, bool (*fp)(void* , void* )) {
 		return;
 	}
 	int b = *(a + n);
-	for (int i = 0; i < n; i++) {
+	/*for (int i = 0; i < n; i++) {
 		if (fp(a+i, &b)) {
 			print_process(i, n);
 			print_ary(a, m);
 			move_ary(a, m, n, i);
 			break;
 		}
-	}
+	}*/
+	int i = binary_search(a, m, n, 0, n, fp);
+	print_process(i, n);
+	print_ary(a, m);
+	move_ary(a, m, n, i);
 	insert_sort(a, m, n + 1, fp);
 }
 
 
 int main() {
 	int a[] = { 1,2,3,4,5,6,7,10,9,8 };
-	binary_sort(a, 10, 1, 0, 0, cmp_u);
+	//binary_sort(a, 10, 1, 0, 0, cmp_u);
+	insert_sort(a, 10, 0, cmp_u);
 	print_ary(a, 10);
 }

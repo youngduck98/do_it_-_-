@@ -1,20 +1,32 @@
 #include<stdlib.h>
 #include"cell_sort.h"
 
-void cell_sort(int* a, int m) {
+void cell_sort(int* a, int m, bool (*fp)(void* ,void*)) {
 	int tmp = 0;
-	int k = 0;
-	for (int h = m / 2; h >= 1; h /= 2) {
-		for (int j = 0; j < h; j ++) {
-			for (int p = j; p < m; p += h) {
-				tmp = a[p];
-				for (k = p; k >= h && a[k - h] > tmp; k -= h) {
-					a[k] = a[k - h];
+	int p = 0;
+	int h = 0;
+	for (; h < m / 4; h = 2 * h + 1);
+
+	for (h = 3; h >= 1; h /= 2) {
+		for (int g = 0; g < h; g++) {
+			for (int k = g; k < m; k += h) {
+				tmp = a[k];
+				for (p = k; p >= h && !fp(a+p-h, &tmp); p -= h) {
+					a[p] = a[p - h];
+					//어떤 구역 뒤에 있는 것을 빼서 앞쪽에 집어 넣는 것이므로 뒤 부터 계산한다면 간편하다.
 				}
-				a[k] = tmp;
-				print_ary(a, m);
+				a[p] = tmp;
 			}
 		}
+	}
+}
+
+bool cmp_u(int* a, int* b) {
+	if (*a < *b) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
@@ -38,8 +50,8 @@ void insert_sort(int* a, int m) {
 }
 
 int main() {
-	int a[9] = { 9,10,8,7,6,5,4,3,2 };
-	cell_sort(a, 9);
+	int a[9] = { 9,10,7,8,6,4,5,3,2 };
+	cell_sort(a, 9, cmp_u);
 	//insert_sort(a, 9);
 	print_ary(a, 9);
 }

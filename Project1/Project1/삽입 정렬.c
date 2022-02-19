@@ -119,10 +119,23 @@ void insert_sort(int* a, int m, int n, bool (*fp)(void* , void* )) {
 	insert_sort(a, m, n + 1, fp);
 }
 
+void insert_sort2(int* a, int m, bool (*fp)(int* ,int*)) {
+	int tmp = 0;
+	int j = 0;
+	for (int i = 1; i < m; i++) {
+		tmp = a[i];
+		for (j = i; j >= 1 && !fp(a+j-1,&tmp); j--) {
+			a[j] = a[j - 1];
+		}
+		a[j] = tmp;
+	}
+}
+
 
 int main() {
 	int a[] = { 1,2,3,4,5,6,7,10,9,8 };
 	//binary_sort(a, 10, 1, 0, 0, cmp_u);
-	insert_sort(a, 10, 0, cmp_u);
+	//insert_sort(a, 10, 0, cmp_u);
+	insert_sort2(a, 10, cmp_u);
 	print_ary(a, 10);
 }

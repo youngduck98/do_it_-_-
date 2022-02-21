@@ -27,27 +27,48 @@ void swap(int* a, int* b) {
 	*b = c;
 }
 
-void quick_sort2(int* a, int m) {
-	if (m <= 1) {
-		return;
+bool cmp_u(int* a, int* b)
+{
+	printf("%d %d\n", *a, *b);
+	if (*a < *b) return true;
+	else return false;
+}
+
+void print_c_ary(char* a, int m, int n) {
+	for (int i = 0; i < m; i++) {
+		for (int k = 0; k < n; k++) {
+			printf("%c", *(a + n * i + k));
+		}
+		printf("\n");
 	}
+}
+
+void quick_sort2(int* a, int m, bool (*fp)(int* , int* )) {
 	int pl = 0;
-	int pr = m - 1;
+	int pr = m-1;
+	int x = a[m/ 2];
 	do {
-		while (a[m / 2] > a[pl])pl++;
-		while (a[m / 2] < a[pr])pr--;
+		printf("x: %d\n", x);
+		while (fp(a + pl, &x)) {
+			if (a[pl] == x) break;
+			pl++;
+		}
+		while (fp(&x, a + pr)) {
+			if (a[pr] == x) break;
+			pr--;
+		}
+		printf("pl, pr: %d %d\n", pl, pr);
+		print_ary(a, m);
 		if (pl <= pr) {
 			swap(a + pl, a + pr);
 			pl++;
 			pr--;
 		}
+		print_ary(a, m);
+		printf("\n");
 	} while (pl <= pr);
-	if (pr<0 || pl>m - 1) {
-		return;
-	}
-	print_ary(a, m);
-	quick_sort2(a, pl);
-	quick_sort2(a + m - pr, pr);
+	if (pl<m-1)quick_sort2(a + pl, m-pl, fp);
+	if (pr>0)quick_sort2(a, pr+1, fp);
 }
 
 void quick_sort(int* a, int m) {
@@ -82,8 +103,18 @@ void print_ary(int* a, int m) {
 	printf("\n");
 }
 
+void test(char *a) {
+	printf("%c", *(a+7));
+}
+
 int main() {
-	int a[10] = { 7,9,8,10,6,5,4,3,2,1 };
-	quick_sort2(a, 10);
+	int a[10] = { 7,9,8,10,1,5,4,3,2,6 };
+	char c[4][7] = { "lisp", "c", "ada", "pascal" };
+	//printf("%c", **c);//배열 이라는 것을 main내에서 기억하고 있어 가능한 방법
+	//배열 자체를 넘기고 싶다면 a[][7]이나 (*a)[7]이용
+	//test(c);//넘겨질 때 더블 포인터가 아니라 그냥 그 주소가 넘어간다.
 	print_ary(a, 10);
+	quick_sort2(a, 10, cmp_u);
+	print_ary(a, 10);
+	//print_ary(c, 4);
 }
